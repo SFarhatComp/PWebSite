@@ -7,9 +7,14 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from dotenv import load_dotenv
+import logging
 
 # Load environment variables
 load_dotenv()
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__, static_folder='build', static_url_path='/')
 CORS(app)
@@ -21,6 +26,9 @@ app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_USER')
 app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_PASS')
 app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('EMAIL_USER')
+
+# Log mail configuration (without password)
+logger.info(f"Mail configuration: SERVER={app.config['MAIL_SERVER']}, PORT={app.config['MAIL_PORT']}, USER={app.config['MAIL_USERNAME']}")
 
 mail = Mail(app)
 
@@ -63,15 +71,26 @@ def contact():
     if not data or not data.get('name') or not data.get('email') or not data.get('message'):
         return jsonify({'success': False, 'error': 'All fields are required'}), 400
     
+    # Set recipient email, falling back to sender if not provided
+    recipient_email = os.environ.get('RECIPIENT_EMAIL')
+    if not recipient_email:
+        recipient_email = os.environ.get('EMAIL_USER')
+        logger.info(f"RECIPIENT_EMAIL not set, using EMAIL_USER: {recipient_email}")
+    
+    logger.info(f"Attempting to send email from {data['name']} <{data['email']}>")
+    
     try:
         msg = Message(
             subject=f"CV Website Contact: {data['name']}",
-            recipients=[os.environ.get('RECIPIENT_EMAIL', os.environ.get('EMAIL_USER'))],
+            recipients=[recipient_email],
             body=f"From: {data['name']} <{data['email']}>\n\n{data['message']}"
         )
+        logger.info(f"Created message to {recipient_email} with subject '{msg.subject}'")
         mail.send(msg)
+        logger.info("Email sent successfully")
         return jsonify({'success': True})
     except Exception as e:
+        logger.error(f"Failed to send email: {str(e)}", exc_info=True)
         return jsonify({'success': False, 'error': str(e)}), 500
 
 # Email sending endpoint
@@ -83,6 +102,13 @@ def send_email():
     email_user = os.environ.get('EMAIL_USER')
     email_pass = os.environ.get('EMAIL_PASS')
     recipient_email = os.environ.get('RECIPIENT_EMAIL')
+    
+    # Set recipient email, falling back to sender if not provided
+    if not recipient_email:
+        recipient_email = email_user
+        logger.info(f"RECIPIENT_EMAIL not set, using EMAIL_USER: {recipient_email}")
+
+    logger.info(f"Attempting to send email via SMTP from {data.get('name')} <{data.get('email')}>")
     
     # Create message
     msg = MIMEMultipart()
@@ -101,14 +127,19 @@ def send_email():
     msg.attach(MIMEText(body, 'plain'))
     
     try:
+        logger.info(f"Connecting to SMTP server: smtp.gmail.com:587")
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
+        logger.info(f"Logging in as {email_user}")
         server.login(email_user, email_pass)
         text = msg.as_string()
+        logger.info(f"Sending email to {recipient_email}")
         server.sendmail(email_user, recipient_email, text)
         server.quit()
+        logger.info("Email sent successfully via SMTP")
         return jsonify({"success": True})
     except Exception as e:
+        logger.error(f"Failed to send email via SMTP: {str(e)}", exc_info=True)
         return jsonify({"success": False, "error": str(e)}), 500
 
 @app.route('/api/debug')

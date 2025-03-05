@@ -42,4 +42,16 @@ services:
         gunicorn --bind 0.0.0.0:5000 app:app
       "
     depends_on:
-      - frontend 
+      - frontend
+
+  email-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    volumes:
+      - .:/app
+    environment:
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+      - RECIPIENT_EMAIL=${RECIPIENT_EMAIL}
+    command: python /app/test_email.py 
