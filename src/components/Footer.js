@@ -9,6 +9,10 @@ function Footer() {
   }
   
   const { copyright, socialLinks } = content.footer;
+  const { name } = content.personal;
+  
+  // Use the name from personal information to create a dynamic copyright message if needed
+  const copyrightText = copyright.replace('Sami Farhat', name);
   
   return (
     <footer className="footer">
@@ -27,7 +31,7 @@ function Footer() {
           ))}
         </div>
         <div className="copyright">
-          {copyright}
+          {copyrightText}
         </div>
       </div>
     </footer>

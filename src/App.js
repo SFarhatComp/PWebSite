@@ -4,6 +4,7 @@ import { AnimatePresence } from 'framer-motion';
 import { ContentProvider } from './utils/contentLoader';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import SiteMetadata from './components/SiteMetadata';
 import HomePage from './pages/HomePage';
 import CVPage from './pages/CVPage';
 import ProjectsPage from './pages/ProjectsPage';
@@ -14,6 +15,7 @@ function App() {
   return (
     <ContentProvider>
       <Router>
+        <SiteMetadata />
         <div className="flex flex-col min-h-screen bg-light">
           <Navbar />
           <main className="flex-grow">

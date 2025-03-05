@@ -10,6 +10,16 @@ personal:
     A passionate software developer with expertise in Python, React, and backend systems. 
     I specialize in building scalable applications, optimizing workflows, and solving complex problems.
 
+# Site Metadata
+metadata:
+  siteTitle: "Personal Portfolio"
+  siteDescription: "Professional portfolio and resume website"
+  siteFavicon: "/favicon.ico"
+  siteLanguage: "en"
+  siteAuthor: "Sami Farhat"
+  siteUrl: "https://yourdomain.com"
+  ogImage: "/og-image.jpg"
+
 # Navigation Links
 navigation:
   - title: "Home"
@@ -23,7 +33,7 @@ navigation:
 
 # Footer
 footer:
-  copyright: "© 2024 Sami Farhat. All rights reserved."
+  copyright: "© 2025 Sami Farhat. All rights reserved."
   socialLinks:
     - platform: "GitHub"
       url: "https://github.com/SFarhatComp"
