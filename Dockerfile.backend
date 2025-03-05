@@ -6,10 +6,15 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app.py .
+COPY content.yaml .
+
+# Create directory for build and static files
+RUN mkdir -p /app/build /app/static
 
 EXPOSE 5000
 
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"] 
+# Debug the file system
+CMD ["sh", "-c", "ls -la /app && ls -la /app/build || echo 'Build directory empty' && gunicorn --bind 0.0.0.0:5000 app:app"] 

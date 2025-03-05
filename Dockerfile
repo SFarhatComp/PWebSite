@@ -30,6 +30,7 @@ COPY --from=build /app/build /app/build
 
 # Copy the Flask app and static files
 COPY app.py .
+COPY content.yaml .
 COPY static /app/static
 
 # Expose the port the app runs on

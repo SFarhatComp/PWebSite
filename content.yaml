@@ -1,0 +1,125 @@
+# Personal Information
+personal:
+  name: "Sami Farhat"
+  title: "Software Developer"
+  email: "sfarhat4@gmail.com"
+  phone: "+1 (514) 581-2205"
+  location: "Quebec, Canada"
+  profileImage: "/profile-photo.jpg"
+  bio: >
+    A passionate software developer with expertise in Python, React, and backend systems. 
+    I specialize in building scalable applications, optimizing workflows, and solving complex problems.
+
+# Navigation Links
+navigation:
+  - title: "Home"
+    url: "/"
+  - title: "CV"
+    url: "/cv"
+  - title: "Projects"
+    url: "/projects"
+  - title: "Contact"
+    url: "/contact"
+
+# Footer
+footer:
+  copyright: "© 2024 Sami Farhat. All rights reserved."
+  socialLinks:
+    - platform: "GitHub"
+      url: "https://github.com/SFarhatComp"
+      icon: "github"
+    - platform: "LinkedIn"
+      url: "https://www.linkedin.com/in/samifarhat00/"
+      icon: "linkedin"
+    - platform: "Email"
+      url: "mailto:sfarhat4@gmail.com"
+      icon: "email"
+
+# Home Page
+home:
+  heading: "Hi, I'm Sami Farhat"
+  subheading: "Software Developer & Tech Enthusiast"
+  ctaButton: "View My Work"
+  ctaUrl: "/projects"
+  backgroundImage: "/images/background.jpg"
+
+# About Page
+about:
+  heading: "About Me"
+  paragraphs:
+    - >
+      I'm a software developer with experience in Python, React, and backend infrastructure. 
+      My work focuses on building scalable applications and automation tools.
+    - >
+      When I'm not coding, I enjoy exploring new technologies, contributing to open-source projects, 
+      and refining my technical skills.
+  skills:
+    - name: "Python"
+      level: 95
+    - name: "React"
+      level: 85
+    - name: "Docker"
+      level: 80
+    - name: "RabbitMQ"
+      level: 75
+    - name: "Networking & Security"
+      level: 70
+
+# Experience Page
+experience:
+  heading: "Work Experience"
+  jobs:
+    - title: "Application Software Developer"
+      company: "Boeing"
+      period: "Sept 2023 - Present"
+      description: >
+        Led development of a pilot bidding platform, enhancing performance and reducing costs. 
+        Built and optimized backend services to streamline workflows.
+      technologies: ["Python", "API Development", "Docker", "SQL"]
+    - title: "Operational Effectiveness Analyst - Intern"
+      company: "BMO Financial Group"
+      period: "Sept 2021 - Jan 2022"
+      description: >
+        Developed automation tools in TypeScript to improve Excel workflows and internal processes.
+      technologies: ["TypeScript", "Excel Automation", "Data Analysis"]
+
+# Projects Page
+projects:
+  heading: "My Projects"
+  items:
+    - title: "Real-Time Offline Translation System"
+      description: "A self-hosted, real-time speech-to-text translation system optimized for offline use."
+      image: "/projects/real-time-translation.jpg"
+      url: "https://github.com/SFarhatComp/Real-Time-Translation-Device"
+      technologies: ["Python", "FastAPI", "RabbitMQ", "Redis", "Docker"]
+    - title: "ApplyMate - AI-Powered Job Application Assistant"
+      description: "An AI tool that fetches job postings, filters relevant ones, and generates custom cover letters."
+      image: "/projects/applymate.jpg"
+      url: "https://github.com/SFarhatComp/ApplyMate"
+      technologies: ["Python", "Web Scraping", "OpenAI API", "Automation"]
+    - title: "FTP Protocol Implementation"
+      description: "A custom-built FTP protocol implementation for secure file transfers."
+      image: "/projects/ftp-protocol.jpg"
+      url: "https://github.com/SFarhatComp/FTP-Protocol-Project"
+      technologies: ["Python", "Sockets", "Networking"]
+    - title: "Alcohol Sensor"
+      description: "An Android-based alcohol sensor using hardware integration for safety monitoring."
+      image: "/projects/alcohol-sensor.jpg"
+      url: "https://github.com/SFarhatComp/AlcoholSensor"
+      technologies: ["Java", "Android Development", "Arduino"]
+
+# Contact Page
+contact:
+  heading: "Get In Touch"
+  subheading: "Feel free to reach out for any opportunities or collaborations."
+  formFields:
+    - label: "Name"
+      type: "text"
+      required: true
+    - label: "Email"
+      type: "email"
+      required: true
+    - label: "Message"
+      type: "textarea"
+      required: true
+  submitButton: "Send Message"

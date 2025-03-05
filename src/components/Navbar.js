@@ -1,60 +1,55 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { useContent } from '../utils/contentLoader';
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { content, loading } = useContent();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
+  if (loading || !content) {
+    return <div>Loading...</div>;
+  }
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Close mobile menu when route changes
-  useEffect(() => {
-    setIsOpen(false);
-  }, [location]);
+  const { navigation } = content;
+  const { name } = content.personal;
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-300 ${
-      scrolled ? 'bg-white shadow-md py-2' : 'bg-transparent py-4'
-    }`}>
+    <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center">
-          <Link to="/" className="text-xl font-bold text-primary">
-            Sami Farhat
-          </Link>
-          
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-8">
-            <NavLink to="/" label="Home" currentPath={location.pathname} />
-            <NavLink to="/cv" label="CV" currentPath={location.pathname} />
-            <NavLink to="/projects" label="Projects" currentPath={location.pathname} />
-            <NavLink to="/contact" label="Contact" currentPath={location.pathname} />
+        <div className="flex justify-between h-16">
+          <div className="flex">
+            <Link to="/" className="flex-shrink-0 flex items-center">
+              <span className="text-xl font-bold text-primary">{name}</span>
+            </Link>
           </div>
-          
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <button 
-              onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-500 hover:text-primary focus:outline-none"
+          <div className="hidden md:ml-6 md:flex md:space-x-8">
+            {navigation.map((item, index) => (
+              <Link
+                key={index}
+                to={item.url}
+                className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium ${
+                  location.pathname === item.url
+                    ? 'border-primary text-gray-900'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                {item.title}
+              </Link>
+            ))}
+          </div>
+          <div className="-mr-2 flex items-center md:hidden">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
             >
-              {isOpen ? (
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <span className="sr-only">Open main menu</span>
+              {isMenuOpen ? (
+                <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               ) : (
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               )}
@@ -62,63 +57,28 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-      
-      {/* Mobile Navigation */}
-      {isOpen && (
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className="md:hidden bg-white shadow-lg"
-        >
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <MobileNavLink to="/" label="Home" currentPath={location.pathname} />
-            <MobileNavLink to="/cv" label="CV" currentPath={location.pathname} />
-            <MobileNavLink to="/projects" label="Projects" currentPath={location.pathname} />
-            <MobileNavLink to="/contact" label="Contact" currentPath={location.pathname} />
+
+      {isMenuOpen && (
+        <div className="md:hidden">
+          <div className="pt-2 pb-3 space-y-1">
+            {navigation.map((item, index) => (
+              <Link
+                key={index}
+                to={item.url}
+                className={`block pl-3 pr-4 py-2 border-l-4 text-base font-medium ${
+                  location.pathname === item.url
+                    ? 'bg-primary-50 border-primary text-primary'
+                    : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700'
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.title}
+              </Link>
+            ))}
           </div>
-        </motion.div>
+        </div>
       )}
     </nav>
-  );
-};
-
-const NavLink = ({ to, label, currentPath }) => {
-  const isActive = currentPath === to;
-  
-  return (
-    <Link 
-      to={to} 
-      className={`relative px-3 py-2 text-sm font-medium ${
-        isActive ? 'text-primary' : 'text-gray-700 hover:text-primary'
-      }`}
-    >
-      {label}
-      {isActive && (
-        <motion.div 
-          layoutId="navbar-underline"
-          className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"
-          initial={false}
-        />
-      )}
-    </Link>
-  );
-};
-
-const MobileNavLink = ({ to, label, currentPath }) => {
-  const isActive = currentPath === to;
-  
-  return (
-    <Link 
-      to={to} 
-      className={`block px-3 py-2 rounded-md text-base font-medium ${
-        isActive 
-          ? 'bg-primary bg-opacity-10 text-primary' 
-          : 'text-gray-700 hover:bg-gray-50 hover:text-primary'
-      }`}
-    >
-      {label}
-    </Link>
   );
 };
 
