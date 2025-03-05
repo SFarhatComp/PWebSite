@@ -20,9 +20,10 @@ app = Flask(__name__, static_folder='build', static_url_path='/')
 CORS(app)
 
 # Configure mail settings
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
+app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT', 465))
+app.config['MAIL_USE_SSL'] = os.environ.get('MAIL_USE_SSL', 'True').lower() == 'true'
+app.config['MAIL_USE_TLS'] = os.environ.get('MAIL_USE_TLS', 'False').lower() == 'true'
 app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_USER')
 app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_PASS')
 app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('EMAIL_USER')
@@ -127,9 +128,14 @@ def send_email():
     msg.attach(MIMEText(body, 'plain'))
     
     try:
-        logger.info(f"Connecting to SMTP server: smtp.gmail.com:587")
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
+        smtp_server = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
+        smtp_port = int(os.environ.get('SMTP_PORT', 587))
+        logger.info(f"Connecting to SMTP server: {smtp_server}:{smtp_port}")
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        use_tls = os.environ.get('SMTP_USE_TLS', 'True').lower() == 'true'
+        if use_tls:
+            logger.info("Starting TLS")
+            server.starttls()
         logger.info(f"Logging in as {email_user}")
         server.login(email_user, email_pass)
         text = msg.as_string()
