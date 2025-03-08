@@ -16,5 +16,12 @@ EXPOSE 5000
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 
+# Add this to ensure the static files are properly served
+ENV STATIC_URL /static
+ENV STATIC_PATH /app/static
+
 # Debug the file system
-CMD ["sh", "-c", "ls -la /app && ls -la /app/build || echo 'Build directory empty' && gunicorn --bind 0.0.0.0:5000 app:app"] 
+# CMD ["sh", "-c", "ls -la /app && ls -la /app/build || echo 'Build directory empty' && gunicorn --bind 0.0.0.0:5000 app:app"]
+
+# At the end of the file, use a command that properly serves all routes
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "--forwarded-allow-ips", "*", "app:app"] 

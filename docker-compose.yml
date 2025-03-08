@@ -26,7 +26,7 @@ services:
       - EMAIL_PASS=${EMAIL_PASS}
       - RECIPIENT_EMAIL=${RECIPIENT_EMAIL}
     volumes:
-      - ./static:/app/static
+      - ./static:/app/static:ro
       - ./build:/app/build
       - ./content.yaml:/app/content.yaml
     command: >
@@ -44,15 +44,15 @@ services:
     depends_on:
       - frontend
 
-# Email test service
-  email-test:
-    build:
-      context: .
-      dockerfile: Dockerfile.backend
-    volumes:
-      - .:/app
-    environment:
-      - EMAIL_USER=${EMAIL_USER}
-      - EMAIL_PASS=${EMAIL_PASS}
-      - RECIPIENT_EMAIL=${RECIPIENT_EMAIL}
-    command: python /app/test_email.py 
+# # Email test service
+#   email-test:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile.backend
+#     volumes:
+#       - .:/app
+#     environment:
+#       - EMAIL_USER=${EMAIL_USER}
+#       - EMAIL_PASS=${EMAIL_PASS}
+#       - RECIPIENT_EMAIL=${RECIPIENT_EMAIL}
+#     command: python /app/test_email.py 

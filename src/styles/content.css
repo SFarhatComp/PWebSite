@@ -1,0 +1,347 @@
+/* Add this file and import it in your App.js */
+
+/* Text justification and spacing */
+.text-justify {
+  text-align: justify;
+}
+
+/* Bullet points styling */
+.bullet-list {
+  list-style-type: none;
+  padding-left: 1.5rem;
+}
+
+.bullet-list li {
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+
+.bullet-list li:before {
+  content: "•";
+  color: #3b82f6;
+  position: absolute;
+  left: -1.5rem;
+  top: 0;
+  font-size: 1.25rem;
+}
+
+/* Proper paragraph spacing */
+p + p {
+  margin-top: 1rem;
+}
+
+/* Skill tag styling */
+.skill-tag {
+  display: inline-block;
+  background-color: #f3f4f6;
+  color: #4b5563;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Job description styling */
+.job-bullet {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.job-bullet-marker {
+  color: #3b82f6;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+}
+
+.job-bullet-text {
+  text-align: justify;
+}
+
+/* Enhanced bullet point styling */
+.bullet-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+  text-align: justify;
+}
+
+.bullet-marker {
+  color: #3b82f6;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+}
+
+.bullet-text {
+  flex: 1;
+  text-align: justify;
+}
+
+/* Fix text justification */
+.justify-text {
+  text-align: justify !important;
+}
+
+/* Add this to your content.css file */
+.project-image-container {
+  height: 12rem;
+  background-color: #f3f4f6;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.project-image:hover {
+  transform: scale(1.03);
+}
+
+.project-card-image {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.project-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.project-card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.project-card-image:hover img {
+  transform: scale(1.05);
+}
+
+.polaroid-card {
+  background: white;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  border-radius: 4px;
+  padding: 15px 15px 30px 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.polaroid-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0,0,0,0.2);
+}
+
+.polaroid-image {
+  height: 180px;
+  overflow: hidden;
+  border-radius: 2px;
+  margin-bottom: 10px;
+}
+
+.polaroid-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.polaroid-placeholder {
+  height: 180px;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  color: #666;
+  font-style: italic;
+}
+
+.magazine-card {
+  display: flex;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  height: 220px;
+}
+
+.magazine-content {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.magazine-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #334155;
+}
+
+.magazine-desc {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin-bottom: 15px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.magazine-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 15px;
+}
+
+.magazine-tag {
+  font-size: 0.7rem;
+  background: #f1f5f9;
+  color: #3b82f6;
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+.magazine-link {
+  margin-top: auto;
+  align-self: flex-start;
+  background: #3b82f6;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.magazine-link:hover {
+  background: #2563eb;
+}
+
+.magazine-image {
+  width: 40%;
+  overflow: hidden;
+}
+
+.magazine-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.magazine-image-placeholder {
+  width: 40%;
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+}
+
+@media (max-width: 640px) {
+  .magazine-card {
+    flex-direction: column-reverse;
+    height: auto;
+  }
+  
+  .magazine-image, .magazine-image-placeholder {
+    width: 100%;
+    height: 180px;
+  }
+}
+
+.elegant-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.elegant-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+}
+
+.elegant-image {
+  height: 180px;
+  overflow: hidden;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.elegant-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.elegant-card:hover .elegant-image img {
+  transform: scale(1.05);
+}
+
+.elegant-placeholder {
+  height: 180px;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.elegant-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 8px;
+}
+
+.elegant-desc {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.elegant-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.elegant-tag {
+  font-size: 0.7rem;
+  color: #3b82f6;
+  background: #eff6ff;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.elegant-link {
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #3b82f6;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.elegant-link:hover {
+  border-color: #3b82f6;
+} 

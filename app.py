@@ -38,13 +38,30 @@ mail = Mail(app)
 @app.route('/<path:path>')
 def serve(path):
     try:
+        logger.info(f"Received request for path: {path}")
+        
+        # If path starts with static, handle it via the serve_static route
+        if path.startswith('static/'):
+            return serve_static(path[7:])  # Remove 'static/' from the path
+            
+        # Check if the path exists in the build directory
         if path and os.path.exists(os.path.join(app.static_folder, path)):
+            logger.info(f"File exists in build folder, serving directly")
             return send_from_directory(app.static_folder, path)
-        else:
-            return send_from_directory(app.static_folder, 'index.html')
+            
+        # For any other route, serve the index.html file
+        logger.info(f"Serving index.html for SPA routing")
+        return send_from_directory(app.static_folder, 'index.html')
     except Exception as e:
-        app.logger.error(f"Error serving file: {e}")
+        logger.error(f"Error serving file: {e}", exc_info=True)
         return f"Error serving file: {e}", 500
+
+# Explicitly handle all frontend routes
+@app.route('/cv')
+@app.route('/projects')
+@app.route('/contact')
+def frontend_routes():
+    return send_from_directory(app.static_folder, 'index.html')
 
 # Serve the content.yaml file
 @app.route('/content.yaml')
@@ -164,6 +181,56 @@ def debug():
     }
     
     return jsonify(debug_info)
+
+# Add this route to debug the Flask server routing
+@app.route('/api/debug-routes')
+def debug_routes():
+    """Debug endpoint to check routes"""
+    routes = []
+    for rule in app.url_map.iter_rules():
+        routes.append({
+            'endpoint': rule.endpoint,
+            'methods': list(rule.methods),
+            'path': str(rule)
+        })
+    
+    return jsonify({
+        'routes': routes,
+        'static_folder': app.static_folder,
+        'static_url_path': app.static_url_path
+    })
+
+# Add this route to specifically handle static files
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    logger.info(f"Requested static file: {filename}")
+    
+    # First try the regular static directory for our custom files
+    static_dir = os.path.join(os.getcwd(), 'static')
+    if os.path.exists(os.path.join(static_dir, filename)):
+        logger.info(f"Found in static directory: {static_dir}")
+        return send_from_directory('static', filename)
+    
+    # If not found, try the build/static directory for React files
+    build_static_dir = os.path.join(os.getcwd(), 'build', 'static')
+    if os.path.exists(os.path.join(build_static_dir, filename)):
+        logger.info(f"Found in build/static directory: {build_static_dir}")
+        return send_from_directory(os.path.join('build', 'static'), filename)
+    
+    # Check if it's a JS/CSS file (might be in the root of build/static)
+    if filename.startswith('js/') or filename.startswith('css/'):
+        file_parts = filename.split('/')
+        if len(file_parts) > 1:
+            subdir = file_parts[0]  # 'js' or 'css'
+            file_name = '/'.join(file_parts[1:])  # everything else
+            build_assets_dir = os.path.join(os.getcwd(), 'build', 'static', subdir)
+            if os.path.exists(os.path.join(build_assets_dir, file_name)):
+                logger.info(f"Found in build/static/{subdir}: {file_name}")
+                return send_from_directory(os.path.join('build', 'static', subdir), file_name)
+    
+    # Log that we couldn't find the file
+    logger.error(f"File not found in any static directories: {filename}")
+    return f"Could not find static file: {filename}", 404
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0') 

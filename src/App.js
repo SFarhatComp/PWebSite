@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { ContentProvider } from './utils/contentLoader';
 import Navbar from './components/Navbar';
@@ -10,6 +10,7 @@ import CVPage from './pages/CVPage';
 import ProjectsPage from './pages/ProjectsPage';
 import ContactPage from './pages/ContactPage';
 import './App.css';
+import './styles/content.css';
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
                 <Route path="/cv" element={<CVPage />} />
                 <Route path="/projects" element={<ProjectsPage />} />
                 <Route path="/contact" element={<ContactPage />} />
+                {/* Catch-all route - redirect to home */}
+                <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </AnimatePresence>
           </main>

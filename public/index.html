@@ -11,10 +11,40 @@
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Sami Farhat - CV</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <script>
+      if (window.location.pathname !== '/' && 
+          !window.location.pathname.includes('.') && 
+          !window.location.pathname.startsWith('/static/') &&
+          !window.location.pathname.startsWith('/api/')) {
+        
+        sessionStorage.setItem('redirectPath', window.location.pathname);
+        
+        if (window.location.hostname !== 'localhost' && 
+            window.location.hostname !== '127.0.0.1') {
+          window.location.href = '/';
+        }
+      }
+
+      window.addEventListener('load', function() {
+        var redirectPath = sessionStorage.getItem('redirectPath');
+        if (redirectPath && window.location.pathname === '/') {
+          sessionStorage.removeItem('redirectPath');
+          
+          window.history.replaceState(null, null, redirectPath);
+          
+          if (window.routeChange) {
+            window.routeChange(redirectPath);
+          }
+        }
+      });
+    </script>
   </body>
 </html> 
