@@ -33,12 +33,13 @@ COPY app.py .
 COPY content.yaml .
 COPY static /app/static
 
-# Expose the port the app runs on
-EXPOSE 5000
+# Cloud Run uses PORT environment variable - IMPORTANT CHANGE
+ENV PORT 8080
+EXPOSE 8080
 
 # Set environment variables
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=production
 
-# Command to run the application
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"] 
+# Command to run the application - updated to use PORT env variable
+CMD exec gunicorn --bind :$PORT --workers 4 --timeout 0 app:app 

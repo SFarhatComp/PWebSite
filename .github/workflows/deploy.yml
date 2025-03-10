@@ -1,0 +1,38 @@
+name: Build and Deploy to Cloud Run
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        project_id: rich-stratum-453105-p0
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
+    
+    - name: Authorize Docker push
+      run: gcloud auth configure-docker
+    
+    - name: Build Docker image
+      run: docker build -t gcr.io/rich-stratum-453105-p0/cv-website:${{ github.sha }} .
+    
+    - name: Push to Container Registry
+      run: docker push gcr.io/rich-stratum-453105-p0/cv-website:${{ github.sha }}
+    
+    - name: Deploy to Cloud Run
+      run: |
+        gcloud run deploy cv-website \
+          --image gcr.io/rich-stratum-453105-p0/cv-website:${{ github.sha }} \
+          --platform managed \
+          --region us-central1 \
+          --allow-unauthenticated \
+          --update-secrets=EMAIL_USER=email-user:latest,EMAIL_PASS=email-pass:latest,RECIPIENT_EMAIL=recipient-email:latest 
