@@ -47,7 +47,7 @@ footer:
 # Home Page
 home:
   heading: "Hi, I'm Sami Farhat"
-  subheading: "Software Developer & CI/CD Pipeline Expert"
+  subheading: "Software Developer & CI/CD Pipeline Expert v2"
   ctaButton: "View My Work"
   ctaUrl: "/projects"
   backgroundImage: "/images/background.jpg"
