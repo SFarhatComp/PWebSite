@@ -131,29 +131,117 @@ const CVPage = () => {
       {/* Skills section */}
       <section className="mb-16">
         <h2 className="text-2xl font-bold mb-8">Skills</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {skills.map((skill, index) => {
-            // Handle different skill formats (object or nested object)
-            const skillName = typeof skill === 'object' && skill.name ? skill.name : 
-                             (typeof skill === 'object' ? Object.keys(skill)[0] : skill);
-            const skillLevel = typeof skill === 'object' && skill.level ? skill.level : 
-                              (typeof skill === 'object' ? skill[Object.keys(skill)[0]] : 50);
-            
-            return (
-              <div key={index} className="bg-white p-5 rounded-lg shadow-md">
-                <div className="flex justify-between items-center mb-3">
-                  <h3 className="font-semibold text-lg">{skillName}</h3>
-                  <span className="text-sm text-gray-600 font-medium">{skillLevel}%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2.5">
-                  <div 
-                    className="bg-blue-600 h-2.5 rounded-full" 
-                    style={{ width: `${skillLevel}%` }}
-                  ></div>
-                </div>
-              </div>
-            );
-          })}
+        
+        {/* Skills Matrix with modern, clean styling */}
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+          <table className="min-w-full divide-y divide-gray-100">
+            <thead>
+              <tr className="bg-gray-50">
+                <th scope="col" className="py-4 px-6 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Skill
+                </th>
+                <th scope="col" className="py-4 px-6 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Proficiency
+                </th>
+                <th scope="col" className="py-4 px-6 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Experience
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {skills.map((skill, index) => {
+                // Extract skill data
+                const skillName = typeof skill === 'object' && skill.name ? skill.name : 
+                                (typeof skill === 'object' ? Object.keys(skill)[0] : skill);
+                const skillLevel = typeof skill === 'object' && skill.level ? skill.level : 
+                                (typeof skill === 'object' ? skill[Object.keys(skill)[0]] : 50);
+                // Extract experience data if available
+                const skillExperience = typeof skill === 'object' && skill.experience ? skill.experience : 'Occasionally';
+                
+                // CUSTOMIZE HERE: Map numeric level to proficiency descriptions
+                // You can adjust these thresholds to change how skills are categorized
+                let proficiency;
+                let proficiencyBadgeClass;
+                
+                if (skillLevel >= 90) {
+                  proficiency = "Expert";
+                  proficiencyBadgeClass = "bg-blue-50 text-blue-700 border border-blue-200";
+                } else if (skillLevel >= 75) {
+                  proficiency = "Advanced";
+                  proficiencyBadgeClass = "bg-indigo-50 text-indigo-700 border border-indigo-200";
+                } else if (skillLevel >= 50) {
+                  proficiency = "Intermediate";
+                  proficiencyBadgeClass = "bg-purple-50 text-purple-700 border border-purple-200";
+                } else {
+                  proficiency = "Familiar";
+                  proficiencyBadgeClass = "bg-violet-50 text-violet-700 border border-violet-200";
+                }
+                
+                // Map experience to badge classes based on value from content.yaml
+                let experience = skillExperience;
+                let experienceBadgeClass;
+                
+                if (experience === "Daily") {
+                  experienceBadgeClass = "bg-green-50 text-green-700 border border-green-200";
+                } else if (experience === "Weekly") {
+                  experienceBadgeClass = "bg-amber-50 text-amber-700 border border-amber-200";
+                } else {
+                  // Default to "Occasionally" or any other value
+                  experience = "Occasionally"; // normalize any other values
+                  experienceBadgeClass = "bg-slate-50 text-slate-600 border border-slate-200";
+                }
+                
+                return (
+                  <tr key={index} className="hover:bg-gray-50 transition-colors duration-150">
+                    <td className="py-4 px-6 whitespace-nowrap">
+                      <span className="text-sm font-medium text-gray-800">{skillName}</span>
+                    </td>
+                    <td className="py-4 px-6 whitespace-nowrap">
+                      <span className={`px-3 py-1 inline-flex text-xs font-medium rounded-full ${proficiencyBadgeClass}`}>
+                        {proficiency}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 whitespace-nowrap">
+                      <span className={`px-3 py-1 inline-flex text-xs font-medium rounded-full ${experienceBadgeClass}`}>
+                        {experience}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        
+        {/* Skills Legend - Now simplified without the experience levels section */}
+        <div className="mt-4 bg-white p-5 rounded-xl shadow-sm">
+          <h3 className="text-base font-medium text-gray-700 mb-3">Proficiency Levels</h3>
+          <div className="flex flex-wrap gap-4">
+            <div className="flex items-center">
+              <span className="px-3 py-1 mr-2 inline-flex text-xs font-medium rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                Expert
+              </span>
+              <span className="text-sm text-gray-600">Mastered, can teach others</span>
+            </div>
+            <div className="flex items-center">
+              <span className="px-3 py-1 mr-2 inline-flex text-xs font-medium rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                Advanced
+              </span>
+              <span className="text-sm text-gray-600">Strong knowledge, use confidently</span>
+            </div>
+            <div className="flex items-center">
+              <span className="px-3 py-1 mr-2 inline-flex text-xs font-medium rounded-full bg-purple-50 text-purple-700 border border-purple-200">
+                Intermediate
+              </span>
+              <span className="text-sm text-gray-600">Good working knowledge</span>
+            </div>
+            <div className="flex items-center">
+              <span className="px-3 py-1 mr-2 inline-flex text-xs font-medium rounded-full bg-violet-50 text-violet-700 border border-violet-200">
+                Familiar
+              </span>
+              <span className="text-sm text-gray-600">Basic understanding</span>
+            </div>
+          </div>
         </div>
       </section>
       

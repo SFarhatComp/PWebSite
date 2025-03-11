@@ -53,6 +53,18 @@ home:
   backgroundImage: "/images/background.jpg"
 
 # About Page
+# Skills section with proficiency and experience levels
+  # Proficiency levels (level field):
+  # - 90-100: Expert - Mastered, can teach others
+  # - 75-89: Advanced - Strong knowledge, use confidently
+  # - 50-74: Intermediate - Good working knowledge
+  # - 0-49: Familiar - Basic understanding
+  #
+  # Experience levels (experience field):
+  # - "Daily" - Used in everyday work
+  # - "Weekly" - Used regularly but not daily
+  # - "Occasionally" - Used periodically as needed
+  
 about:
   heading: "About Me"
   paragraphs:
@@ -65,16 +77,29 @@ about:
   skills:
     - name: "Python"
       level: 90
+      experience: "Daily"
     - name: "Data Structures & Algorithms"
       level: 80
-    - name: "Docker"
-      level: 80
+      experience: "Daily"
     - name: "Linux"
       level: 90
+      experience: "Daily"
     - name: "Git"
       level: 85
+      experience: "Daily"
+    - name: "Docker"
+      level: 70
+      experience: "Weekly"
+    - name: "C++"
+      level: 60
+      experience: "Occasionally"
+    - name: "JAVA"
+      level: 49
+      experience: "Occasionally"
     - name: "Problem Solving"
-      level: 90      
+      level: 90
+      experience: "Daily"
+
 # Experience Page
 experience:
   heading: "Work Experience"
@@ -106,7 +131,7 @@ currently_learning:
     - name: "Docker & Kubernetes"
       description: "Improving containerization skills and orchestration for scalable applications"
     - name: "AI Workflow Automation"
-      description: "Exploring machine learning frameworks for practical applications"
+      description: "Exploring machine learning frameworks and tools for practical applications"
     - name: "Rust Language"
       description: "Learning the Rust Language for System Programming in the goal to build my own blockchain"
     - name: "Blockchain Development and Web3.0"
