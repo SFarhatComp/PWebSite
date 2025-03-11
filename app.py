@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file, abort, send_from_directory
+from flask import Flask, request, jsonify, send_file, abort, send_from_directory, redirect
 from flask_cors import CORS
 from flask_mail import Mail, Message
 import os
@@ -32,6 +32,23 @@ app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('EMAIL_USER')
 logger.info(f"Mail configuration: SERVER={app.config['MAIL_SERVER']}, PORT={app.config['MAIL_PORT']}, USER={app.config['MAIL_USERNAME']}")
 
 mail = Mail(app)
+
+# Add middleware to redirect www to non-www if accessed directly
+@app.before_request
+def redirect_www():
+    host = request.host.lower()
+    if host.startswith('www.'):
+        non_www_host = host[4:]
+        # Build full URL with scheme, non-www host, and the rest of the URL
+        new_url = f"{request.scheme}://{non_www_host}{request.path}"
+        if request.query_string:
+            new_url += f"?{request.query_string.decode('utf-8')}"
+        
+        logger.info(f"Redirecting from {host} to {non_www_host} with 301 status")
+        response = redirect(new_url, code=301)
+        # Add cache control headers to make browsers remember this redirect
+        response.headers['Cache-Control'] = 'max-age=31536000'  # Cache for 1 year
+        return response
 
 # Serve the default React app
 @app.route('/', defaults={'path': ''})
