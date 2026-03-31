@@ -1,45 +1,29 @@
-# Use Node.js for building the React app
-FROM node:16 AS build
+FROM node:18-alpine AS frontend-build
 
-# Set working directory
 WORKDIR /app
 
-# Copy package.json first (and package-lock.json if it exists)
-COPY package.json ./
-# Run npm install which will generate package-lock.json
-RUN npm install
+COPY package.json package-lock.json ./
+RUN npm ci
 
-# Copy all project files
 COPY . .
-
-# Build the React app
 RUN npm run build
 
-# Use Python for the Flask backend
-FROM python:3.9-slim
+FROM python:3.9-slim AS runtime
 
-# Set working directory
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV FLASK_APP=app.py
+ENV PORT=8080
+
 WORKDIR /app
 
-# Copy Python requirements and install dependencies
-COPY requirements.txt .
+COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the built React app from the previous stage
-COPY --from=build /app/build /app/build
+COPY app.py content.yaml ./
+COPY static ./static
+COPY --from=frontend-build /app/build ./build
 
-# Copy the Flask app and static files
-COPY app.py .
-COPY content.yaml .
-COPY static /app/static
-
-# Cloud Run uses PORT environment variable - IMPORTANT CHANGE
-ENV PORT 8080
 EXPOSE 8080
 
-# Set environment variables
-ENV FLASK_APP=app.py
-ENV FLASK_ENV=production
-
-# Command to run the application - updated to use PORT env variable
-CMD exec gunicorn --bind :$PORT --workers 4 --timeout 0 app:app 
+CMD ["sh", "-c", "exec gunicorn --bind 0.0.0.0:${PORT} --workers 4 --timeout 120 app:app"]
